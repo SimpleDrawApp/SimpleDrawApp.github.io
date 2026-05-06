@@ -4,6 +4,7 @@
   "description": "A modern simple drawing app",
   "start_url": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay"],
   "background_color": "#f3f3f3",
   "theme_color": "#005fb8",
   "icons": [

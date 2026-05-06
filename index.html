@@ -53,7 +53,30 @@
         }
 
         /* === TITLE BAR & MENU BAR === */
-        .title-bar { height: 32px; display: flex; align-items: center; padding-left: 15px; font-size: 12px; font-weight: 600; background: var(--app-surface); }
+        .title-bar { 
+            /* Dùng chiều cao chuẩn do hệ điều hành cung cấp, mặc định là 32px */
+            height: env(titlebar-area-height, 32px); 
+            display: flex; 
+            align-items: center; 
+            
+            /* Căn lề an toàn tránh bị lẹm */
+            padding-left: env(titlebar-area-x, 15px); 
+            font-size: 12px; 
+            font-weight: 600; 
+            background: var(--app-surface); 
+            
+            /* CỰC KỲ QUAN TRỌNG: Lệnh này biến thanh HTML thành thanh nắm kéo cửa sổ */
+            -webkit-app-region: drag; 
+            
+            /* Chừa không gian bên phải để chứa cụm nút Minimize/Maximize/Close của Windows */
+            padding-right: calc(env(titlebar-area-width, 0px) + 10px);
+        }
+        
+        /* Ngăn không cho kéo thả khi click vào các nội dung bên trong title bar */
+        .title-bar img, .title-bar svg {
+            -webkit-app-region: no-drag;
+        }
+
         .menu-bar { display: flex; padding: 4px 10px; background: var(--app-surface); border-bottom: 1px solid var(--app-border); gap: 6px; align-items: center; }
         .menu-divider { width: 1px; height: 16px; background-color: var(--app-border); margin: 0 4px; }
         
