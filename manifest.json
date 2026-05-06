@@ -8,12 +8,12 @@
   "theme_color": "#005fb8",
   "icons": [
     {
-      "src": "https://img.icons8.com/color/192/microsoft-paint.png",
+      "src": "https://img.icons8.com/skeuomorphism/192/paint-palette-with-brush.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://img.icons8.com/color/512/microsoft-paint.png",
+      "src": "https://img.icons8.com/skeuomorphism/512/paint-palette-with-brush.png",
       "sizes": "512x512",
       "type": "image/png"
     }
