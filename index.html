@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Chặn Google/Edge tự động đề xuất dịch trang -->
     <meta name="google" content="notranslate">
     
-    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#005fb8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -16,7 +14,6 @@
     
     <title>SimpleDraw</title>
     
-    <!-- Link to PWA files -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icon-192.png">
 
@@ -37,7 +34,7 @@
             --app-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
 
-        /* ẨN BÀN TAY TOÀN CỤC: Set mặc định cursor là default cho mọi thành phần */
+        /* ẨN BÀN TAY TOÀN CỤC */
         * { box-sizing: border-box; user-select: none; cursor: default; }
         
         body, button, input, select, textarea { 
@@ -45,81 +42,59 @@
         }
 
         body { 
-            margin: 0; 
-            padding: 0; 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            background-color: var(--app-bg); 
-            overflow: hidden;
-            color: var(--app-text);
+            margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; 
+            background-color: var(--app-bg); overflow: hidden; color: var(--app-text);
         }
 
-        /* === TITLE BAR & MENU BAR === */
+        /* === TITLE BAR === */
         .title-bar { 
-            /* Dùng chiều cao chuẩn do hệ điều hành cung cấp, mặc định là 32px */
-            height: env(titlebar-area-height, 32px); 
-            display: flex; 
-            align-items: center; 
-            
-            /* Căn lề an toàn tránh bị lẹm */
-            padding-left: env(titlebar-area-x, 15px); 
-            font-size: 12px; 
-            font-weight: 600; 
-            background: var(--app-surface); 
-            
-            /* CỰC KỲ QUAN TRỌNG: Lệnh này biến thanh HTML thành thanh nắm kéo cửa sổ */
-            -webkit-app-region: drag; 
-            
-            /* Chừa không gian bên phải để chứa cụm nút Minimize/Maximize/Close của Windows */
+            height: env(titlebar-area-height, 32px); display: flex; align-items: center; 
+            padding-left: env(titlebar-area-x, 15px); font-size: 12px; font-weight: 600; 
+            background: var(--app-surface); -webkit-app-region: drag; 
             padding-right: calc(env(titlebar-area-width, 0px) + 10px);
         }
-        
-        /* Ngăn không cho kéo thả khi click vào các nội dung bên trong title bar */
-        .title-bar img, .title-bar svg {
-            -webkit-app-region: no-drag;
-        }
+        .title-bar img, .title-bar svg { -webkit-app-region: no-drag; }
 
-        .menu-bar { display: flex; padding: 4px 10px; background: var(--app-surface); border-bottom: 1px solid var(--app-border); gap: 6px; align-items: center; }
-        .menu-divider { width: 1px; height: 16px; background-color: var(--app-border); margin: 0 4px; }
+        /* === MENU BAR: Cho phép rớt dòng, căn trái === */
+        .menu-bar { 
+            display: flex; padding: 6px 10px; background: var(--app-surface); 
+            border-bottom: 1px solid var(--app-border); gap: 6px; align-items: center; 
+            flex-wrap: wrap; justify-content: flex-start; /* Sửa thành căn trái */
+        }
+        .menu-divider { min-width: 1px; height: 16px; background-color: var(--app-border); margin: 0 4px; }
         
         .app-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            padding: 5px 11px;
-            border-radius: var(--app-radius);
-            font-size: 13px;
-            color: var(--app-text);
-            transition: all 0.1s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            background: transparent; border: 1px solid transparent; padding: 5px 11px;
+            border-radius: var(--app-radius); font-size: 13px; color: var(--app-text);
+            transition: all 0.1s ease; display: flex; align-items: center; gap: 6px;
+            white-space: nowrap;
         }
         .app-btn:hover { background: var(--app-hover); border-color: transparent; }
         .app-btn:active { background: var(--app-active-bg); color: var(--app-text-secondary); }
 
-        /* === RIBBON (TOOLBAR) === */
-        .ribbon { display: flex; background: var(--app-surface); padding: 8px 15px 8px 15px; gap: 20px; border-bottom: 1px solid var(--app-border); }
-        .ribbon-group { display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-right: 1px solid var(--app-border); padding-right: 20px; }
-        .ribbon-group:last-child { border-right: none; }
+        /* === RIBBON (TOOLBAR): Cho phép rớt dòng, căn trái === */
+        .ribbon { 
+            display: flex; background: var(--app-surface); padding: 8px 15px; gap: 15px; 
+            border-bottom: 1px solid var(--app-border); 
+            flex-wrap: wrap; justify-content: flex-start; /* Sửa thành căn trái */
+        }
+        .ribbon-group { 
+            display: flex; flex-direction: column; justify-content: space-between; align-items: center; 
+            border-right: 1px solid var(--app-border); padding-right: 15px; 
+        }
+        .ribbon-group:last-child { border-right: none; padding-right: 0;}
         .ribbon-content { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; align-items: center; height: 100%; flex: 1; }
-        .ribbon-label { font-size: 12px; color: var(--app-text-secondary); margin-top: 8px; }
+        .ribbon-label { font-size: 12px; color: var(--app-text-secondary); margin-top: 8px; white-space: nowrap;}
 
         .tool-btn { 
-            width: 36px; height: 36px; 
-            display: flex; align-items: center; justify-content: center; 
-            background: transparent; 
-            border: 1px solid transparent; 
-            border-radius: var(--app-radius); 
-            transition: 0.1s; 
-            color: var(--app-text); 
+            width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; 
+            background: transparent; border: 1px solid transparent; border-radius: var(--app-radius); 
+            transition: 0.1s; color: var(--app-text); 
         }
         .tool-btn:hover { background-color: var(--app-hover); }
         .tool-btn.active { 
-            background-color: var(--app-active-bg); 
-            border: 1px solid var(--app-border);
-            border-bottom-color: var(--app-accent);
-            border-bottom-width: 2px;
+            background-color: var(--app-active-bg); border: 1px solid var(--app-border);
+            border-bottom-color: var(--app-accent); border-bottom-width: 2px;
         }
         .tool-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5px; }
 
@@ -128,26 +103,19 @@
         /* === SLIDER & INPUT === */
         .size-control { display: flex; align-items: center; gap: 10px; height: 32px; }
         .app-slider {
-            -webkit-appearance: none;
-            width: 100px; height: 4px;
-            background: var(--app-border-bottom);
-            border-radius: 2px; outline: none; 
+            -webkit-appearance: none; width: 100px; height: 4px;
+            background: var(--app-border-bottom); border-radius: 2px; outline: none; 
         }
         .app-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none;
-            width: 16px; height: 16px; border-radius: 50%;
-            background: var(--app-accent); 
-            border: 2px solid #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.3);
+            -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%;
+            background: var(--app-accent); border: 2px solid #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.3);
             transition: transform 0.1s;
         }
         .app-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
         
         .app-number {
-            width: 50px; height: 32px;
-            border: 1px solid var(--app-border);
-            border-bottom-color: var(--app-border-bottom);
-            border-radius: var(--app-radius);
-            padding: 4px 6px; text-align: center;
+            width: 50px; height: 32px; border: 1px solid var(--app-border); border-bottom-color: var(--app-border-bottom);
+            border-radius: var(--app-radius); padding: 4px 6px; text-align: center;
             font-size: 14px; outline: none; transition: 0.1s;
         }
         .app-number:focus { border-color: var(--app-accent); border-bottom-width: 2px; padding-bottom: 3px; }
@@ -164,23 +132,43 @@
         .palette-color { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--app-border); transition: 0.1s; }
         .palette-color:hover { border-color: var(--app-text); transform: scale(1.15); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-        .workspace { flex: 1; overflow: auto; display: flex; padding: 20px; justify-content: center; align-items: flex-start; }
-        .canvas-container { margin: 0; padding: 0; background-color: var(--app-surface); box-shadow: var(--app-shadow); border-radius: 2px; }
-        /* Giữ lại crosshair cho canvas để người dùng biết là vùng vẽ được */
-        canvas { display: block; cursor: crosshair; background-color: #ffffff; }
+        /* === ÉP VỪA KHÍT TRÊN ĐIỆN THOẠI === */
+        @media (max-width: 768px) {
+            .ribbon { gap: 6px; padding: 8px 4px; }
+            .ribbon-group { 
+                border-right: none; padding-right: 0; 
+                padding: 4px; border: 1px solid var(--app-border); 
+                border-radius: var(--app-radius); background: var(--app-bg);
+            }
+            .menu-divider { display: none; }
+            /* Thu nhỏ các thành phần để không chiếm hết chiều cao màn hình */
+            .tool-btn { width: 30px; height: 30px; }
+            .app-btn { font-size: 11px; padding: 4px 8px; }
+            .palette-color { width: 16px; height: 16px; }
+            .palette { gap: 2px; }
+            .color-circle { width: 26px; height: 26px; }
+            .color-circle input[type="color"] { width: 36px; height: 36px; margin: -5px; }
+        }
+
+        /* === WORKSPACE & CANVAS === */
+        .workspace { flex: 1; overflow: auto; display: flex; padding: 10px; justify-content: center; align-items: flex-start; }
+        .canvas-container { margin: 0; padding: 0; background-color: var(--app-surface); box-shadow: var(--app-shadow); border-radius: 2px; max-width: 100%; }
+        
+        canvas { 
+            display: block; cursor: crosshair; background-color: #ffffff; 
+            touch-action: none; max-width: 100%; height: auto; 
+        }
 
         .status-bar { height: 28px; background-color: var(--app-surface); border-top: 1px solid var(--app-border); display: flex; align-items: center; padding: 0 15px; font-size: 12px; color: var(--app-text-secondary); }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <!-- Title Bar -->
     <div class="title-bar">
         <img src="https://img.icons8.com/skeuomorphism/16/paint-palette-with-brush.png" alt="SimpleDraw Icon" style="width: 16px; height: 16px; margin-right: 8px;">
         SimpleDraw
     </div>
 
-    <!-- Menu Bar -->
     <div class="menu-bar">
         <button class="app-btn" id="btnSaveBin">💾 Save Project (.bin)</button>
         <button class="app-btn" id="btnLoadBin">📂 Load Project (.bin)</button>
@@ -190,9 +178,7 @@
         <button class="app-btn" id="btnExportJpeg">🌄 Export JPEG</button>
     </div>
 
-    <!-- Ribbon -->
     <div class="ribbon">
-        <!-- Tools -->
         <div class="ribbon-group">
             <div class="ribbon-content">
                 <button class="tool-btn active" data-tool="point" title="Pencil">
@@ -215,7 +201,6 @@
             <div class="ribbon-label">Tools</div>
         </div>
 
-        <!-- Shapes -->
         <div class="ribbon-group">
             <div class="ribbon-content shapes-grid">
                 <button class="tool-btn" data-tool="line" title="Line">
@@ -237,7 +222,6 @@
             <div class="ribbon-label">Shapes</div>
         </div>
 
-        <!-- Size -->
         <div class="ribbon-group">
             <div class="ribbon-content size-control">
                 <input type="range" id="strokeWidthSlider" class="app-slider" min="1" max="50" value="2" title="Drag to adjust thickness">
@@ -249,7 +233,6 @@
             <div class="ribbon-label">Size</div>
         </div>
 
-        <!-- Colors -->
         <div class="ribbon-group">
             <div class="ribbon-content color-section">
                 <div class="color-boxes">
@@ -268,7 +251,6 @@
             <div class="ribbon-label">Colors</div>
         </div>
         
-        <!-- Actions -->
         <div class="ribbon-group">
             <div class="ribbon-content" style="gap: 8px;">
                 <button class="app-btn" id="btnUndo" style="height: 36px;" title="Undo (Ctrl+Z)">
@@ -297,14 +279,12 @@
         </div>
     </div>
 
-    <!-- Workspace -->
     <div class="workspace">
         <div class="canvas-container">
             <canvas id="canvas" width="1000" height="600"></canvas>
         </div>
     </div>
 
-    <!-- Status Bar -->
     <div class="status-bar">
         <span id="cursorPos">0, 0 px</span>
     </div>
@@ -384,7 +364,6 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
-        // Off-screen canvas for extreme performance during flood fill & preview
         const cacheCanvas = document.createElement('canvas');
         cacheCanvas.width = 1000;
         cacheCanvas.height = 600;
@@ -399,7 +378,7 @@
         const TYPE_MAP = { 'point': 1, 'line': 2, 'rectangle': 3, 'square': 4, 'ellipse': 5, 'circle': 6, 'bucket': 7, 'eraser': 8 };
         const REVERSE_TYPE_MAP = { 1: 'point', 2: 'line', 3: 'rectangle', 4: 'square', 5: 'ellipse', 6: 'circle', 7: 'bucket', 8: 'eraser' };
 
-        // --- FLOOD FILL ALGORITHM (Scanline BFS) ---
+        // --- FLOOD FILL ALGORITHM ---
         function hexToRgba(hex) {
             let r = parseInt(hex.slice(1, 3), 16);
             let g = parseInt(hex.slice(3, 5), 16);
@@ -428,7 +407,7 @@
             
             if (startR === fillRgba[0] && startG === fillRgba[1] && startB === fillRgba[2] && startA === fillRgba[3]) return;
 
-            const tolerance = 60; // Allow small color variance for anti-aliased lines
+            const tolerance = 60;
             const matchColor = (pos) => {
                 const dr = Math.abs(data[pos] - startR);
                 const dg = Math.abs(data[pos+1] - startG);
@@ -570,30 +549,23 @@
             }
         }
 
-        // --- CACHE & RENDERING SYSTEM ---
         function updateCache() {
             cacheCtx.fillStyle = '#ffffff';
             cacheCtx.fillRect(0, 0, cacheCanvas.width, cacheCanvas.height);
-            
             shapes.forEach(shape => {
-                if (shape.type === 'bucket') {
-                    doFloodFill(cacheCtx, shape.x1, shape.y1, shape.fillColor);
-                } else {
-                    drawShape(cacheCtx, shape);
-                }
+                if (shape.type === 'bucket') doFloodFill(cacheCtx, shape.x1, shape.y1, shape.fillColor);
+                else drawShape(cacheCtx, shape);
             });
         }
 
         function redraw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(cacheCanvas, 0, 0); // Fast render from cached state
-            
+            ctx.drawImage(cacheCanvas, 0, 0); 
             if (isDrawing && currentShape && currentShape.type !== 'bucket') {
                 drawShape(ctx, currentShape);
             }
         }
 
-        // --- HISTORY MANAGEMENT ---
         function saveState() {
             if (undoStack.length >= 50) undoStack.shift();
             undoStack.push(JSON.parse(JSON.stringify(shapes)));
@@ -624,101 +596,89 @@
         document.getElementById('btnUndo').addEventListener('click', triggerUndo);
         document.getElementById('btnRedo').addEventListener('click', triggerRedo);
 
-        // --- MOUSE EVENTS ---
-        canvas.addEventListener('mousedown', (e) => {
+        // --- POINTER EVENTS KÈM SCALE TỌA ĐỘ ---
+        canvas.addEventListener('pointerdown', (e) => {
             const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            // Tính toán tỷ lệ thu nhỏ màn hình
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            // Khớp tọa độ click thực tế vào bức tranh 1000x600
+            const x = Math.round((e.clientX - rect.left) * scaleX);
+            const y = Math.round((e.clientY - rect.top) * scaleY);
 
             if (currentTool === 'bucket') {
                 saveState();
                 shapes.push({
-                    type: 'bucket',
-                    x1: x, y1: y, x2: x, y2: y,
-                    strokeColor: '#000000',
-                    fillColor: fillColorInput.value,
-                    strokeWidth: 1,
-                    useFill: true
+                    type: 'bucket', x1: x, y1: y, x2: x, y2: y,
+                    strokeColor: '#000000', fillColor: fillColorInput.value,
+                    strokeWidth: 1, useFill: true
                 });
-                updateCache();
-                redraw();
-                return; 
+                updateCache(); redraw(); return; 
             }
 
             saveState(); 
             isDrawing = true;
 
             currentShape = {
-                type: currentTool,
-                x1: x, y1: y, x2: x, y2: y,
-                // Eraser uses Color 2 (Fill Color) to "erase"
+                type: currentTool, x1: x, y1: y, x2: x, y2: y,
                 strokeColor: currentTool === 'eraser' ? fillColorInput.value : strokeColorInput.value,
-                fillColor: fillColorInput.value,
-                strokeWidth: parseFloat(strokeWidthSlider.value), 
-                useFill: true 
+                fillColor: fillColorInput.value, strokeWidth: parseFloat(strokeWidthSlider.value), useFill: true 
             };
 
             if(currentTool === 'point' || currentTool === 'eraser') {
                 if(currentTool === 'point') currentShape.type = 'line';
                 shapes.push({...currentShape}); 
-                drawShape(cacheCtx, currentShape); // Quick update cache
+                drawShape(cacheCtx, currentShape); 
             }
             redraw();
         });
 
-        canvas.addEventListener('mousemove', (e) => {
+        canvas.addEventListener('pointermove', (e) => {
             const rect = canvas.getBoundingClientRect();
-            const mouseX = Math.round(e.clientX - rect.left);
-            const mouseY = Math.round(e.clientY - rect.top);
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            const mouseX = Math.round((e.clientX - rect.left) * scaleX);
+            const mouseY = Math.round((e.clientY - rect.top) * scaleY);
+            
             cursorPosSpan.textContent = `${mouseX}, ${mouseY} px`;
 
             if (!isDrawing) return;
 
             if (currentTool === 'point' || currentTool === 'eraser') {
-                currentShape.x2 = mouseX;
-                currentShape.y2 = mouseY;
+                currentShape.x2 = mouseX; currentShape.y2 = mouseY;
                 shapes.push({...currentShape}); 
-                drawShape(cacheCtx, currentShape); // Quick update cache
-                
-                currentShape.x1 = mouseX;
-                currentShape.y1 = mouseY;
+                drawShape(cacheCtx, currentShape); 
+                currentShape.x1 = mouseX; currentShape.y1 = mouseY;
             } else {
-                currentShape.x2 = mouseX;
-                currentShape.y2 = mouseY;
+                currentShape.x2 = mouseX; currentShape.y2 = mouseY;
             }
             redraw();
         });
 
-        canvas.addEventListener('mouseup', () => {
+        canvas.addEventListener('pointerup', () => {
             if (isDrawing) {
                 if (currentShape && currentTool !== 'point' && currentTool !== 'eraser' && currentTool !== 'bucket') {
-                    shapes.push(currentShape);
-                    updateCache();
+                    shapes.push(currentShape); updateCache();
                 }
-                isDrawing = false;
-                currentShape = null;
-                redraw();
+                isDrawing = false; currentShape = null; redraw();
             }
         });
 
-        canvas.addEventListener('mouseleave', () => {
+        canvas.addEventListener('pointercancel', () => {
             cursorPosSpan.textContent = `0, 0 px`;
             if (isDrawing) {
                 if (currentShape && currentTool !== 'point' && currentTool !== 'eraser' && currentTool !== 'bucket') {
-                    shapes.push(currentShape);
-                    updateCache();
+                    shapes.push(currentShape); updateCache();
                 }
-                isDrawing = false;
-                currentShape = null;
-                redraw();
+                isDrawing = false; currentShape = null; redraw();
             }
         });
 
         // --- FILE & ACTIONS ---
         document.getElementById('btnClear').addEventListener('click', () => { 
-            saveState(); 
-            shapes = []; 
-            updateCache(); redraw(); 
+            saveState(); shapes = []; updateCache(); redraw(); 
         });
 
         function exportImage(format) {
@@ -739,8 +699,7 @@
         document.getElementById('btnSaveBin').addEventListener('click', () => {
             const buffer = new ArrayBuffer(4 + shapes.length * 28);
             const view = new DataView(buffer);
-            view.setUint32(0, shapes.length, true);
-            let offset = 4;
+            view.setUint32(0, shapes.length, true); let offset = 4;
 
             shapes.forEach(s => {
                 view.setUint8(offset, TYPE_MAP[s.type] || 2); offset += 1;
@@ -765,27 +724,20 @@
 
             const blob = new Blob([buffer], { type: "application/octet-stream" });
             const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = "Project.bin";
-            link.click();
+            link.href = URL.createObjectURL(blob); link.download = "Project.bin"; link.click();
         });
 
         const fileInput = document.getElementById('fileInput');
         document.getElementById('btnLoadBin').addEventListener('click', () => fileInput.click());
 
         fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
+            const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = function(event) {
-                const buffer = event.target.result;
-                const view = new DataView(buffer);
+                const buffer = event.target.result; const view = new DataView(buffer);
                 try {
-                    const numShapes = view.getUint32(0, true);
-                    let offset = 4;
+                    const numShapes = view.getUint32(0, true); let offset = 4;
                     const loadedShapes = [];
-
                     for(let i = 0; i < numShapes; i++) {
                         const typeId = view.getUint8(offset); offset += 1;
                         const x1 = view.getFloat32(offset, true); offset += 4;
@@ -809,18 +761,13 @@
                             strokeColor: rgbToHex(sr, sg, sb), fillColor: rgbToHex(fr, fg, fb), useFill
                         });
                     }
-                    saveState(); 
-                    shapes = loadedShapes;
-                    updateCache();
-                    redraw();
+                    saveState(); shapes = loadedShapes; updateCache(); redraw();
                 } catch(error) { alert("Invalid or corrupted file!"); }
             };
-            reader.readAsArrayBuffer(file);
-            fileInput.value = '';
+            reader.readAsArrayBuffer(file); fileInput.value = '';
         });
 
-        updateCache();
-        redraw();
+        updateCache(); redraw();
     </script>
 </body>
 </html>
