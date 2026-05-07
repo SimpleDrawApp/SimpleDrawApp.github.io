@@ -41,9 +41,12 @@
             font-family: "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* SỬA ĐỔI BODY: Cho phép cuộn dọc toàn trang */
         body { 
-            margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; 
-            background-color: var(--app-bg); overflow: hidden; color: var(--app-text);
+            margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; 
+            background-color: var(--app-bg); color: var(--app-text);
+            overflow-x: hidden; 
+            overflow-y: auto; /* Mở khóa cuộn dọc */
         }
 
         /* === TITLE BAR === */
@@ -59,7 +62,7 @@
         .menu-bar { 
             display: flex; padding: 6px 10px; background: var(--app-surface); 
             border-bottom: 1px solid var(--app-border); gap: 6px; align-items: center; 
-            flex-wrap: wrap; justify-content: flex-start; /* Sửa thành căn trái */
+            flex-wrap: wrap; justify-content: flex-start;
         }
         .menu-divider { min-width: 1px; height: 16px; background-color: var(--app-border); margin: 0 4px; }
         
@@ -76,7 +79,7 @@
         .ribbon { 
             display: flex; background: var(--app-surface); padding: 8px 15px; gap: 15px; 
             border-bottom: 1px solid var(--app-border); 
-            flex-wrap: wrap; justify-content: flex-start; /* Sửa thành căn trái */
+            flex-wrap: wrap; justify-content: flex-start;
         }
         .ribbon-group { 
             display: flex; flex-direction: column; justify-content: space-between; align-items: center; 
@@ -141,7 +144,6 @@
                 border-radius: var(--app-radius); background: var(--app-bg);
             }
             .menu-divider { display: none; }
-            /* Thu nhỏ các thành phần để không chiếm hết chiều cao màn hình */
             .tool-btn { width: 30px; height: 30px; }
             .app-btn { font-size: 11px; padding: 4px 8px; }
             .palette-color { width: 16px; height: 16px; }
@@ -151,7 +153,11 @@
         }
 
         /* === WORKSPACE & CANVAS === */
-        .workspace { flex: 1; overflow: auto; display: flex; padding: 10px; justify-content: center; align-items: flex-start; }
+        .workspace { 
+            flex: 1; display: flex; padding: 15px; justify-content: center; align-items: flex-start; 
+            /* VÙNG AN TOÀN CHỐNG MẮC KẸT: Tạo khoảng xám cực rộng ở đáy để ngón tay có chỗ vuốt trang */
+            padding-bottom: 40vh; 
+        }
         .canvas-container { margin: 0; padding: 0; background-color: var(--app-surface); box-shadow: var(--app-shadow); border-radius: 2px; max-width: 100%; }
         
         canvas { 
@@ -159,7 +165,11 @@
             touch-action: none; max-width: 100%; height: auto; 
         }
 
-        .status-bar { height: 28px; background-color: var(--app-surface); border-top: 1px solid var(--app-border); display: flex; align-items: center; padding: 0 15px; font-size: 12px; color: var(--app-text-secondary); }
+        .status-bar { 
+            height: 28px; background-color: var(--app-surface); border-top: 1px solid var(--app-border); display: flex; align-items: center; padding: 0 15px; font-size: 12px; color: var(--app-text-secondary); 
+            /* Neo status bar xuống dưới đáy màn hình cố định (Tùy chọn) */
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
