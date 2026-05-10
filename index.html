@@ -54,7 +54,7 @@
             padding-left: env(titlebar-area-x, 15px); font-size: 12px; font-weight: 600; 
             background: var(--app-surface); -webkit-app-region: drag; 
             padding-right: calc(env(titlebar-area-width, 0px) + 10px);
-            flex-shrink: 0; /* Ngăn bị bóp nghẹt chiều cao */
+            flex-shrink: 0;
         }
         .title-bar img, .title-bar svg { -webkit-app-region: no-drag; }
 
@@ -141,7 +141,7 @@
         .workspace { 
             flex: 1; display: flex; padding: 15px; justify-content: center; align-items: flex-start; 
             padding-bottom: 40vh; 
-            overflow-y: auto; /* Chỉ cho phép cuộn nội dung phần vẽ trên máy tính */
+            overflow-y: auto; 
         }
         .canvas-container { margin: 0; padding: 0; background-color: var(--app-surface); box-shadow: var(--app-shadow); border-radius: 2px; max-width: 100%; }
         
@@ -152,17 +152,17 @@
 
         .status-bar { 
             height: 28px; background-color: var(--app-surface); border-top: 1px solid var(--app-border); display: flex; align-items: center; padding: 0 15px; font-size: 12px; color: var(--app-text-secondary); 
-            flex-shrink: 0; /* Nằm cố định dưới đáy trong luồng flex */
+            flex-shrink: 0; 
         }
 
         /* === ÉP VỪA KHÍT & MỞ CUỘN TOÀN TRANG TRÊN ĐIỆN THOẠI === */
         @media (max-width: 768px) {
             body {
-                height: auto; /* Bỏ khóa chiều cao trang */
-                overflow-y: auto; /* Mở khóa cuộn toàn trang để kéo menu lên trên */
+                height: auto; 
+                overflow-y: auto; 
             }
             .workspace {
-                overflow-y: visible; /* Không tự cuộn lẻ tẻ nữa */
+                overflow-y: visible; 
             }
             .ribbon { gap: 6px; padding: 8px 4px; }
             .ribbon-group { 
@@ -179,7 +179,6 @@
             .color-circle input[type="color"] { width: 36px; height: 36px; margin: -5px; }
             
             .status-bar {
-                /* Đảm bảo thanh trạng thái luôn bám đáy màn hình đt ngay cả khi cuộn trang */
                 position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
             }
         }
@@ -791,6 +790,31 @@
         });
 
         updateCache(); redraw();
+
+        // --- TÍNH NĂNG CẢNH BÁO KHI THOÁT TRANG (BẢN THÔNG MINH) ---
+        // 1. Chụp lại "bức ảnh dữ liệu" lúc app vừa khởi động
+        let lastSavedState = JSON.stringify(shapes);
+
+        // 2. Chụp lại "bức ảnh dữ liệu" mới mỗi khi người dùng tải file (.bin) thành công
+        fileInput.addEventListener('change', () => {
+            // Đợi 500 mili-giây để file load xong hẳn vào canvas rồi mới chụp
+            setTimeout(() => { lastSavedState = JSON.stringify(shapes); }, 500); 
+        });
+
+        // 3. Chụp lại "bức ảnh dữ liệu" mới mỗi khi người dùng bấm Lưu file (.bin)
+        document.getElementById('btnSaveBin').addEventListener('click', () => {
+            // Đợi 100 mili-giây cho hàm Save chạy xong rồi cập nhật trạng thái
+            setTimeout(() => { lastSavedState = JSON.stringify(shapes); }, 100);
+        });
+
+        // 4. Kích hoạt radar quét lúc người dùng định tắt trang
+        window.addEventListener('beforeunload', (e) => {
+            // Chỉ hiện hộp thoại nếu dữ liệu hiện tại KHÁC với lần lưu cuối cùng
+            if (JSON.stringify(shapes) !== lastSavedState) {
+                e.preventDefault(); 
+                e.returnValue = ''; 
+            }
+        });
     </script>
 </body>
 </html>
