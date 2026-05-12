@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.simpledrawapp.twa",
-        "sha256_cert_fingerprints": ["99:C3:4E:7D:67:C7:5D:A2:29:EC:E8:45:AE:A3:7D:F0:F4:F8:95:11:AD:1F:37:01:CF:40:62:A8:1C:47:B9:26"]
-      }
-    }]
